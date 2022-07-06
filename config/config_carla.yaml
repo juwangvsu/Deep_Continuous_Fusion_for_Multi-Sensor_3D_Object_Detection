@@ -11,8 +11,8 @@ plot_AP_graph: False
 
 
 # data_import_carla.py configuration
-train_data_dir: /media/mmc-server1/Server1/chanuk/ready_for_journal/dataset/carla_object
-test_data_dir: /media/mmc-server1/Server1/chanuk/ready_for_journal/dataset/carla_object/test
+train_data_dir: /media/student/data6/venk/dataset/carla_object
+test_data_dir: /media/student/data6/venk/dataset/carla_object/test
 max_num_pc: 20000
 max_num_bbox: 20
 # lidar&voxel configuration

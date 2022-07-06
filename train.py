@@ -20,8 +20,8 @@ class Train(nn.Module):
         device_id_source = config["cuda_visible_id"].split(",")
         device_id = [i for i in range(len(device_id_source))]
         self.loss_total = LossTotal(config)
-        self.model = ObjectDetection_DCF(config).cuda()
-        self.model = DDP(self.model, device_ids=device_id, output_device=0, find_unused_parameters=True)
+        self.model = ObjectDetection_DCF(config)#.cuda()
+        self.model = DDP(self.model, device_ids=device_id[0], output_device=0, find_unused_parameters=True)
         self.loss_value = None
         lr = config["learning_rate"]
         beta1 = config["beta1"]
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = config["cuda_visible_id"]
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = config["port_number"]
-    torch.distributed.init_process_group(backend='nccl', world_size=1, rank=0)
+    torch.distributed.init_process_group(backend='gloo', world_size=1, rank=0)
     if config["dataset_name"] == "carla":
         dataset = CarlaDataset(config)
         dataset_test = CarlaDataset(config, mode="test", want_bev_image=True)

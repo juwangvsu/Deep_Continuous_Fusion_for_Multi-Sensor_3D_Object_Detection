@@ -6,7 +6,7 @@ from torchvision.utils import save_image
 from data_import import putBoundingBox
 import time
 import numpy as np
-import quaternion
+import  quaternion
 
 class CarlaDataset(Dataset):
     def __init__(self, config, mode="train",want_bev_image=False):
@@ -14,6 +14,7 @@ class CarlaDataset(Dataset):
         self.config = config
         self.hdf5_files = self.load_dataset(mode = mode)
         self.hdf5_id_dict = self.getIdDict(self.hdf5_files)
+        print('self.hdf5_id_dict ', self.hdf5_id_dict)
         self.length = 0
         self.scenario_length = []
         self.scenario_name = []
@@ -92,6 +93,7 @@ class CarlaDataset(Dataset):
         hdf5_files = {}
         print("reading hdf5 file...")
         file_list = os.listdir(label_path)
+        print(file_list)
         for file in file_list:
             if file.split('.')[-1] == 'hdf5':
                 file_dir = os.path.join(label_path, file)
@@ -100,7 +102,7 @@ class CarlaDataset(Dataset):
                     print(file)
                 except:
                     print(file + ' doesnt work. we except this folder')
-        print("reading hdf5 end")
+        print("reading hdf5 end", hdf5_files)
         return hdf5_files
 
     def valid_bbox(self, object_data):

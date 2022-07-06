@@ -22,7 +22,7 @@ from data_import import putBoundingBox
 from IOU import get_3d_box, box3d_iou
 from separation_axis_theorem import get_vertice_rect, separating_axis_theorem
 
-
+import yaml
 
 
 class Test:
@@ -251,6 +251,11 @@ class Test:
 
 
 if __name__ == '__main__':
+    CONFIG_PATH = "./config/"
+    config_name = "config_carla.yaml"
+    with open(os.path.join(CONFIG_PATH, config_name)) as file:
+        config = yaml.safe_load(file)
+
     parser = argparse.ArgumentParser(description='deep continuous fusion training')
     parser.add_argument('--data', type=str, default="carla", help='Data type, choose "carla" or "kitti"')
     parser.add_argument('--cuda', type=str, default="0", help="list of cuda visible device number. you can choose 0~7 in list. [EX] --cuda 0,3,4")
@@ -270,7 +275,7 @@ if __name__ == '__main__':
     torch.distributed.init_process_group(backend='nccl', world_size=1, rank=0)
     # Focus on test dataset
     if dataset_category == "carla":
-        dataset = CarlaDataset(mode="test",want_bev_image=True)
+        dataset = CarlaDataset(config, mode="test",want_bev_image=True)
         print("carla dataset is used for training")
     elif dataset_category =="kitti":
         dataset = KittiDataset(mode="test")
@@ -280,7 +285,7 @@ if __name__ == '__main__':
                                           batch_size=2,
                                           shuffle=True)
     # Load pre-trained model. you can use the model during training instead of test_model 
-    test_model = ObjectDetection_DCF().cuda()
+    test_model = ObjectDetection_DCF(config).cuda()
     test_model = DDP(test_model,device_ids=device_id, output_device=0, find_unused_parameters=True)
     test_model.load_state_dict(torch.load("./saved_model/model"))
     test = Test(test_model)
