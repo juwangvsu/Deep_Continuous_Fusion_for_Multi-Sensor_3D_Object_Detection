@@ -30,7 +30,12 @@ import time
 def cameraevent(image,framenum, cc):
     f = h5py.File('_out/%06d.h5' % framenum, 'w')
     dset = f.create_dataset("lidar", (2, 2))
-    image.save_to_disk('_out/%06d.png' % framenum, cc)
+    dset2 = f.create_dataset("depthimg", data= image.raw_data)
+    dset2.attrs['height']=image.height
+    dset2.attrs['width']=image.width
+    dset2.attrs['fov']=image.fov
+    print('xxx h w fov len(rawdata):', type(cc), type(image), image.height, image.width, image.fov, len(image.raw_data))
+    #image.save_to_disk('_out/%06d.png' % framenum, cc)
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -58,7 +63,7 @@ def main():
         # to the simulator. Here we'll assume the simulator is accepting
         # requests in the localhost at port 2000.
         client = carla.Client(args.host, 2000)
-        client.set_timeout(2.0)
+        client.set_timeout(6.0)
 
         # Once we have a client we can retrieve the world that is currently
         # running.
