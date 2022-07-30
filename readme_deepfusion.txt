@@ -1,6 +1,14 @@
 ----- modify code to not use hdf5 file format for dataset ---
 	arldell
 	newamdpc
+-----------------------7/27/22 LDLS test -------------------
+forked from origin: https://github.com/juwangvsu/LDLS.git
+demo.py:
+	arldell out of gpu mem
+	newpcamd works.
+	need about 7gb gpu memory
+	chart_studio.plotly also use 1.5 gb gpu memory. that is after lidarsegment run so won't impose additional gpu mem.
+
 -----------------------7/27/22 map load 0.9.13 and 0.8.4 -------------------
 use -windowed -ResX=600 -ResY=400 improve frame rate
 
@@ -37,6 +45,27 @@ datagen..py:a
 	see constants.py
 	data saving logic: STEPS_BETWEEN_RECORDINGS=10 (sec)
 		DISTANCE_SINCE_LAST_RECORDING=10
+to add pedestrian in the saved data, edit
+    constants.py: 
+	CLASSES_TO_LABEL = ["Vehicle" , "Pedestrian"]
+
+the measurements contain all cars and pedestrian. the function
+	create_kitti_datapoint() check if each object is viewable in current
+	image, using player and objs location and camera matrix
+
+    for agent in measurements.non_player_agents:
+        print(agent.id) # unique id of the agent
+        #print(type(agent)) # unique id of the agent
+        #print(agent) # unique id of the agent
+        if agent.HasField('vehicle'):
+            print('got vehicle:') # unique id of the agent
+            print(agent.vehicle.forward_speed)
+            print(agent.vehicle.transform)
+            print(agent.vehicle.bounding_box)
+        if agent.HasField('pedestrian'):
+            print('got pedestrian:') # unique id of the agent
+            print(agent.pedestrian.transform)
+            print(agent.pedestrian.bounding_box)
 
 
 ----7/15/22 carla-training-data testing -------------
