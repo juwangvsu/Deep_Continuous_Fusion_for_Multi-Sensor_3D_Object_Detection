@@ -110,7 +110,7 @@ carla changes:
 		cv_bridge and python3 issue was trick and for now seems resolved. see readme file 
 		in yolov5_ros
 
-----7/8/22 testing 2d-3d labeling -------------
+----7/8/22 testing ldls  2d-3d labeling -------------
 	LDLS/
 		2d-3d code, ipynb run time error at arldell, cudnn problem, 
 		runs good at newamdpc, gpu memory?
